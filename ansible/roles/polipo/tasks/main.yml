@@ -1,0 +1,21 @@
+---
+- name: install polipo packages
+  with_items: "{{ polipo_packages }}"
+  package:
+    name: "{{ item.name }}"
+  notify:
+    - restart polipo
+
+- name: enable polipo
+  template:
+    src: polipo.j2
+    dest: /etc/rc.conf.d/polipo
+  notify:
+    - restart polipo
+
+- name: configure polipo
+  template:
+    src: config.j2
+    dest: /usr/local/etc/polipo/config
+  notify:
+    - restart polipo
